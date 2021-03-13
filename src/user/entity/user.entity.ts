@@ -1,5 +1,4 @@
 import { EntityBase } from '@/src/base-config/entity/base.entity'
-import { USER_ENTITY } from '@/src/constants'
 import { nanoid } from 'nanoid'
 import { Column, Entity } from 'typeorm'
 

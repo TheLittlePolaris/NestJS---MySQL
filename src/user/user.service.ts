@@ -18,7 +18,9 @@ export class UserService implements OnModuleInit {
 		return await this.usersRepository.find(pagination).catch(null)
 	}
 
-	public async updateUserById(id: number, updateUserData: UpdateUserDto) {}
+	public async updateUserById(id: number, updateUserData: UpdateUserDto) {
+		return await this.usersRepository.updateOne(id, updateUserData)
+	}
 
 	public async updateUser(criteria: { [key in keyof UserDto]: any }, updateUserData: UpdateUserDto) {
 		return await this.usersRepository.update(criteria, { ...updateUserData }).catch(null)

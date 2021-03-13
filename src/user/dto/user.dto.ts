@@ -68,8 +68,8 @@ export class UpdateUserDto {
 	@ApiProperty({ required: false })
 	lastName?: string
 
-	@ApiProperty({ required: false })
-	password?: string
+	// @ApiProperty({ required: false })
+	// password?: string
 
 	constructor() {}
 }
