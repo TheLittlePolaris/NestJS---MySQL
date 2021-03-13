@@ -7,7 +7,10 @@ export class BaseEntityRepo<T extends EntityBase> extends Repository<T> {
 		super()
 	}
 
-	async updateMany(criteria: any, data: any): Promise<UpdateResult> {
+	async updateMany(
+		criteria: { [key in keyof T]: any },
+		data: { [key in keyof T]: any },
+	): Promise<UpdateResult> {
 		data = { ...data, updatedAt: Date.now() }
 		return super.update(criteria, data)
 	}
@@ -18,6 +21,7 @@ export class BaseEntityRepo<T extends EntityBase> extends Repository<T> {
 		Object.keys(data).map((k) => {
 			if (k in record && data[k]) record[k] = data[k]
 		})
+		record.updatedAt = Date.now()
 		return await super.save(record as any)
 	}
 }

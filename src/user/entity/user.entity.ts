@@ -1,4 +1,4 @@
-import { EntityBase } from '@/src/base-config/entity/base.entity'
+import { EntityBase } from '@/src/base/entity/base.entity'
 import { nanoid } from 'nanoid'
 import { Column, Entity } from 'typeorm'
 
@@ -10,7 +10,7 @@ export class User extends EntityBase {
 	@Column({ type: 'varchar' })
 	email: string
 
-	@Column({ type: 'char', length: 64, select: false })
+	@Column({ type: 'char', length: 64 })
 	password: string
 
 	@Column({ type: 'varchar' })

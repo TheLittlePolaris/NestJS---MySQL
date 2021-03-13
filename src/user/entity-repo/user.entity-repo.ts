@@ -1,4 +1,4 @@
-import { BaseEntityRepo } from '@/src/base-config/repo/base.entity-repo'
+import { BaseEntityRepo } from '@/src/base/repo/base.entity-repo'
 import { EntityRepository } from 'typeorm'
 import { CreateUserDto } from '../dto/user.dto'
 import { User } from '../entity/user.entity'
