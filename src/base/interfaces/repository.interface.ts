@@ -1,7 +1,7 @@
 import { FindConditions, ObjectID, ObjectLiteral } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
-export interface Entity extends ObjectLiteral {}
+export type Entity = ObjectLiteral
 
 export type UpdateCritetia =
 	| string
@@ -13,5 +13,5 @@ export type UpdateCritetia =
 	| ObjectID
 	| ObjectID[]
 	| FindConditions<Entity>
-    
+
 export type UpdateData = QueryDeepPartialEntity<Entity>

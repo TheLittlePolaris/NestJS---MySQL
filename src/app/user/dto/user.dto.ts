@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsString } from 'class-validator'
+import { User } from '../entity/user.entity'
 
 export class UserDto {
 	@IsString()
@@ -39,7 +40,16 @@ export class UserDto {
 	@ApiProperty({ default: true })
 	isActive: boolean
 
-	constructor() {}
+	constructor(userData: UserDto | User) {
+		const { id, userId, email, firstName, lastName, fullName } = userData
+
+		this.id = id
+		this.userId = userId
+		this.email = email
+		this.firstName = firstName
+		this.lastName = lastName
+		this.fullName = fullName
+	}
 }
 
 export class CreateUserDto implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId'> {

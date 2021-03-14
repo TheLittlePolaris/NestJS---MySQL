@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { config } from 'dotenv'
 import { existsSync } from 'fs'
 import { EnvConfig } from './interfaces/env.interface'
@@ -23,7 +23,7 @@ export class ConfigService implements OnModuleInit {
 			if (!tested) {
 				process.exit(1)
 			}
-			console.log('Env test passed!')
+			Logger.debug('Env test passed!', ConfigService.name)
 		})()
 	}
 
@@ -53,6 +53,10 @@ export class ConfigService implements OnModuleInit {
 		return this.envConfig['DB_NAME']
 	}
 
+	public get appPort() {
+		return this.envConfig['APP_PORT'] || 12021
+	}
+
 	private async validateSchema(envOutput: { [key: string]: string }) {
 		const schema = object({
 			NODE_ENV: string(),
@@ -68,7 +72,7 @@ export class ConfigService implements OnModuleInit {
 		try {
 			return await schema.validateAsync(envOutput)
 		} catch (err) {
-			console.error(err)
+			Logger.error(err)
 			return null
 		}
 	}

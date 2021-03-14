@@ -2,7 +2,7 @@ import { EntityRepository, Repository, UpdateResult } from 'typeorm'
 import { EntityBase } from '../entity/base.entity'
 
 @EntityRepository()
-export class BaseEntityRepo<T extends EntityBase> extends Repository<T> {
+export class EntityBaseRepository<T extends EntityBase> extends Repository<T> {
 	constructor() {
 		super()
 	}
@@ -15,6 +15,7 @@ export class BaseEntityRepo<T extends EntityBase> extends Repository<T> {
 		return super.update(criteria, data)
 	}
 
+	// TODO: query builder, this is just a demo
 	async updateOne<T>(criteria: any, data: { [K in keyof Partial<T>]?: T[K] }): Promise<T> {
 		const record = await super.findOne(criteria, data)
 		if (!record) return null

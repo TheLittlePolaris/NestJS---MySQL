@@ -32,7 +32,7 @@ export class UserService extends BaseService<User, UserRepository> {
 	}
 
 	public async updateUser(criteria: { [key in keyof UserDto]: any }, updateUserData: UpdateUserDto) {
-		return await this.usersRepository.update(criteria, { ...updateUserData }).catch(null)
+		return await this.usersRepository.update(criteria, updateUserData).catch(null)
 	}
 
 	public async deleteUser(id: number) {
@@ -40,6 +40,7 @@ export class UserService extends BaseService<User, UserRepository> {
 	}
 
 	public async comparePassword(password: string, userPassword: string) {
+		console.log(password, userPassword)
 		return await this.usersRepository.verifyPassword(password, userPassword)
 	}
 }

@@ -3,9 +3,9 @@ import { DeepPartial } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { EntityBase } from '../entity/base.entity'
 import { BasePagination } from '../interfaces/pagination.interface'
-import { BaseEntityRepo } from '../repo/base.entity-repo'
+import { EntityBaseRepository } from '../entity-repository/base.entity-repository'
 
-export abstract class BaseService<T extends EntityBase, K extends BaseEntityRepo<T>> {
+export abstract class BaseService<T extends EntityBase, K extends EntityBaseRepository<T>> {
 	constructor(private repository: K) {}
 
 	async createRecord(data: DeepPartial<T>) {

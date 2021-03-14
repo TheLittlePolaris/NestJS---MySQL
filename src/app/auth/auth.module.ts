@@ -3,11 +3,18 @@ import { AuthService } from './auth.service'
 import { AuthController } from './auth.controller'
 import { UserModule } from '@/src/app/user/user.module'
 import { JwtModule } from '@nestjs/jwt'
+import { ConfigModule } from '../config/config.module'
+import { ConfigService } from '../config/config.service'
 
 @Module({
 	imports: [
 		UserModule,
-		JwtModule.registerAsync({ useFactory: () => ({ secret: 'TheLittleSecret' }) }),
+		ConfigModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			useFactory: (configService: ConfigService) => ({ secret: configService.authSecret }),
+			inject: [ConfigService],
+		}),
 	],
 	providers: [AuthService],
 	controllers: [AuthController],

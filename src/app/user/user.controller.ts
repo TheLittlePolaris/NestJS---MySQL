@@ -9,5 +9,4 @@ export class UserController {
 	async getAll() {
 		return await this.userService.getAll()
 	}
-
 }

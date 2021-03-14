@@ -4,7 +4,8 @@ import { randomBytes, timingSafeEqual, scryptSync } from 'crypto'
 export async function hash(password: string) {
 	try {
 		const salt = randomBytes(8).toString('hex')
-		return (await scryptSync(password, salt, DEFAULT_KEY_LENGTH)).toString('hex')
+		const hashValue = (await scryptSync(password, salt, DEFAULT_KEY_LENGTH)).toString('hex')
+		return `${salt}:${hashValue}`
 	} catch (err) {
 		console.warn('HashError:', err)
 		return null

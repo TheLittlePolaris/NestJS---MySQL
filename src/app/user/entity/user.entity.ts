@@ -4,7 +4,7 @@ import { Column, Entity } from 'typeorm'
 
 @Entity()
 export class User extends EntityBase {
-	@Column({ unique: true, default: nanoid(10) })
+	@Column({ unique: true })
 	userId: string
 
 	@Column({ type: 'varchar' })

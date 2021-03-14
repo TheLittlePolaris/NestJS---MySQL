@@ -8,7 +8,4 @@ export class LoginDto {
 	password: string
 }
 
-
-export class SignUpDto {
-	
-}
+export class SignUpDto {}
