@@ -1,8 +1,8 @@
 {
   "name": "nest-db",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A NestJS & MySQL implementation",
+  "author": "The Little Polaris",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
