@@ -7,3 +7,8 @@ export class LoginDto {
 	@ApiProperty({ required: true })
 	password: string
 }
+
+
+export class SignUpDto {
+	
+}

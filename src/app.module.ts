@@ -1,21 +1,34 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { getConnectionOptions } from 'typeorm'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { UserModule } from './app/user/user.module'
+import { AuthModule } from './app/auth/auth.module'
+import { ConfigService } from './app/config/config.service'
+import { ConfigModule } from './app/config/config.module'
+import { SessionModule } from './app/session/session.module'
 
 @Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () =>
-        Object.assign(await getConnectionOptions(), { autoloadEntities: true }),
-    }),
-    UserModule,
-    AuthModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		ConfigModule,
+		TypeOrmModule.forRootAsync({
+			imports: [ConfigModule],
+			useFactory: async (configService: ConfigService) =>
+				Object.assign(await getConnectionOptions(), {
+					host: configService.dbHost,
+					port: configService.dbPort,
+					username: configService.dbUserName,
+					password: configService.dbPassword,
+					database: configService.dbName,
+				}),
+			inject: [ConfigService],
+		}),
+		UserModule,
+		AuthModule,
+		SessionModule,
+	],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}

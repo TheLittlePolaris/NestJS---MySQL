@@ -8,14 +8,14 @@ export class BaseEntityRepo<T extends EntityBase> extends Repository<T> {
 	}
 
 	async updateMany(
-		criteria: { [key in keyof T]: any },
-		data: { [key in keyof T]: any },
+		criteria: { [key in keyof Partial<T>]?: any },
+		data: { [key in keyof Partial<T>]?: any },
 	): Promise<UpdateResult> {
 		data = { ...data, updatedAt: Date.now() }
 		return super.update(criteria, data)
 	}
 
-	async updateOne<T>(criteria: any, data: { [K in keyof T]: any }): Promise<T> {
+	async updateOne<T>(criteria: any, data: { [K in keyof Partial<T>]?: T[K] }): Promise<T> {
 		const record = await super.findOne(criteria, data)
 		if (!record) return null
 		Object.keys(data).map((k) => {

@@ -1,12 +1,15 @@
 import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common'
-import { BasePagination } from '../base/interfaces/pagination.interface'
+import { BasePagination } from '../../base/interfaces/pagination.interface'
 import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto'
 import { User } from './entity/user.entity'
 import { UserRepository } from './entity-repo/user.entity-repo'
+import { BaseService } from '@/src/base/services/base.service'
 
 @Injectable()
-export class UserService implements OnModuleInit {
-	constructor(private usersRepository: UserRepository) {}
+export class UserService extends BaseService<User, UserRepository> {
+	constructor(private usersRepository: UserRepository) {
+		super(usersRepository)
+	}
 
 	async onModuleInit() {}
 
@@ -25,7 +28,7 @@ export class UserService implements OnModuleInit {
 	}
 
 	public async updateUserById(id: number, updateUserData: UpdateUserDto) {
-		return await this.usersRepository.updateOne(id, updateUserData)
+		return await this.updateOne(id, updateUserData)
 	}
 
 	public async updateUser(criteria: { [key in keyof UserDto]: any }, updateUserData: UpdateUserDto) {
