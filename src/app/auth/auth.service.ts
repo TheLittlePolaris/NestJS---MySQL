@@ -11,7 +11,7 @@ export class AuthService {
 
 	public async signUp(userData: CreateUserDto) {
 		const { email } = userData
-		const existedUser = await this.userService.findOne({ email })
+		const existedUser = await this.userService.findOneUser({ email })
 		if (!!existedUser) throw new HttpException('User Existed', HttpStatus.BAD_REQUEST)
 		const newUser = await this.userService.createUser(userData)
 		return this.signUser(new UserDto(newUser))
@@ -29,7 +29,7 @@ export class AuthService {
 	public async updateSession() {}
 
 	async validateUser(email: string, pass: string): Promise<UserDto | null> {
-		const user = await this.userService.findOne({ email })
+		const user = await this.userService.findOneUser({ email })
 		if (!user) throw new HttpException('Unauthenticated', HttpStatus.UNAUTHORIZED)
 		if (await this.userService.comparePassword(pass, user.password)) {
 			const { password, ...result } = user
