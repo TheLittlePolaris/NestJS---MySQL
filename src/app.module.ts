@@ -8,6 +8,7 @@ import { AuthModule } from './app/auth/auth.module'
 import { ConfigService } from './app/config/config.service'
 import { ConfigModule } from './app/config/config.module'
 import { SessionModule } from './app/session/session.module'
+import { MicroserviceModule } from './app/microservice/microservice.module';
 
 @Module({
 	imports: [
@@ -27,6 +28,7 @@ import { SessionModule } from './app/session/session.module'
 		UserModule,
 		AuthModule,
 		SessionModule,
+		MicroserviceModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

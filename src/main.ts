@@ -10,10 +10,13 @@ import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter'
 import { AllExceptionsFilter } from './exception-filters/all-exception.filter'
 import { ConfigService } from './app/config/config.service'
+import { grpcMailClientOption } from './micro-service/client-options/grpc-client.option'
 
 async function bootstrap() {
 	const BOOSTRAP_CONTEXT = 'Boostrap'
 	const app = await NestFactory.create(AppModule)
+
+	await app.connectMicroservice( grpcMailClientOption)
 
 	const config = new DocumentBuilder()
 		.setTitle('Nestjs Example MySQL')

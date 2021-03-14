@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package micromail;
+
+
+service MailService {
+    rpc SendEmail (MailInput) returns (MailStatus) {}
+}
+
+message MailInput {
+    string mailTemplateName = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string userId = 4;
+}
+
+
+message MailStatus {
+    bool status = 1;
+    optional string error = 2;
+}

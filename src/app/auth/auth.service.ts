@@ -4,16 +4,24 @@ import { UserService } from '@/src/app/user/user.service'
 import { User } from '../user/entity/user.entity'
 import { CreateUserDto, UserDto } from '../user/dto/user.dto'
 import { LoginDto } from './dto/auth.dto'
+import { MicroserviceService } from '../microservice/microservice.service'
 
 @Injectable()
 export class AuthService {
-	constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+	constructor(
+		private readonly userService: UserService,
+		private readonly jwtService: JwtService,
+		private readonly microService: MicroserviceService,
+	) {}
 
 	public async signUp(userData: CreateUserDto) {
 		const { email } = userData
 		const existedUser = await this.userService.findOneUser({ email })
 		if (!!existedUser) throw new HttpException('User Existed', HttpStatus.BAD_REQUEST)
 		const newUser = await this.userService.createUser(userData)
+		const { firstName, lastName, userId } = newUser
+		// demo of using amicro service to send email to new user
+		this.microService.sendMail({ mailTemplateName: 'WelcomeUser', firstName, lastName, userId })
 		return this.signUser(new UserDto(newUser))
 	}
 
