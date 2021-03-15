@@ -1,7 +1,7 @@
 import {
 	CLIENT_NAME,
 	grpcMailClientOption,
-} from '@/src/micro-service/client-options/grpc-client.option'
+} from '@/src/microservice-config/client-options/grpc-client.option'
 import { Module } from '@nestjs/common'
 import { ClientsModule } from '@nestjs/microservices'
 import { ConfigModule } from '../config/config.module'

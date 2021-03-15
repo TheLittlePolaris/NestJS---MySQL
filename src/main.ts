@@ -10,7 +10,7 @@ import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter'
 import { AllExceptionsFilter } from './exception-filters/all-exception.filter'
 import { ConfigService } from './app/config/config.service'
-import { grpcMailClientOption } from './micro-service/client-options/grpc-client.option'
+import { grpcMailClientOption } from './microservice-config/client-options/grpc-client.option'
 
 async function bootstrap() {
 	const BOOSTRAP_CONTEXT = 'Boostrap'
@@ -23,6 +23,7 @@ async function bootstrap() {
 		.setDescription('Nestjs MySQL Example')
 		.setVersion('1.0')
 		.addTag('NestJS MySQL')
+		.addBearerAuth()
 		.build()
 
 	app.enableCors({ origin: '*' })

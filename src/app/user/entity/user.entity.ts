@@ -1,11 +1,19 @@
 import { EntityBase } from '@/src/base/entity/base.entity'
-import { nanoid } from 'nanoid'
+import { USER_ENTITY } from '@/src/constants'
 import { Column, Entity } from 'typeorm'
+import { USER_ROLE } from '../constants/role.constant'
 
 @Entity()
 export class User extends EntityBase {
-	@Column({ unique: true })
+	@Column({ type: 'varchar', unique: true })
 	userId: string
+
+	@Column({
+		type: 'set',
+		enum: [USER_ROLE.NORMAL_USER, USER_ROLE.SUPER_ADMIN],
+		default: [USER_ROLE.NORMAL_USER],
+	})
+	roles: USER_ROLE[]
 
 	@Column({ type: 'varchar' })
 	email: string

@@ -38,6 +38,7 @@ export class AuthService {
 
 	async validateUser(email: string, pass: string): Promise<UserDto | null> {
 		const user = await this.userService.findOneUser({ email })
+		console.log(user)
 		if (!user) throw new HttpException('Unauthenticated', HttpStatus.UNAUTHORIZED)
 		if (await this.userService.comparePassword(pass, user.password)) {
 			const { password, ...result } = user
@@ -47,9 +48,9 @@ export class AuthService {
 	}
 
 	async signUser(user: UserDto) {
-		const { email, userId } = user
+		const { email, userId, roles } = user
 		return {
-			token: this.jwtService.sign({ email, userId }),
+			token: this.jwtService.sign({ email, userId, roles }),
 			user,
 		}
 	}

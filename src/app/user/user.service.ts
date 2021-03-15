@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/com
 import { BasePagination } from '../../base/interfaces/pagination.interface'
 import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto'
 import { User } from './entity/user.entity'
-import { UserRepository } from './entity-repo/user.entity-repo'
+import { UserRepository } from './entity-repository/user.entity-repository'
 import { BaseService } from '@/src/base/services/base.service'
 
 @Injectable()

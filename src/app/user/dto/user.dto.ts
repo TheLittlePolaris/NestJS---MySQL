@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsEnum, IsNotEmpty, IsString, ValidateNested } from 'class-validator'
+import { USER_ROLE } from '../constants/role.constant'
 import { User } from '../entity/user.entity'
 
 export class UserDto {
@@ -12,6 +13,13 @@ export class UserDto {
 	@IsNotEmpty()
 	@ApiProperty({ type: String })
 	userId: string
+
+	@IsEnum(USER_ROLE)
+	@IsArray()
+	@ValidateNested()
+	@IsNotEmpty()
+	@ApiProperty({ enum: USER_ROLE, default: [USER_ROLE.NORMAL_USER] })
+	roles: USER_ROLE[]
 
 	@IsString()
 	@IsNotEmpty()
@@ -52,7 +60,8 @@ export class UserDto {
 	}
 }
 
-export class CreateUserDto implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId'> {
+export class CreateUserDto
+	implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId' | 'roles'> {
 	@ApiProperty({ required: true })
 	email: string
 

@@ -1,9 +1,9 @@
-import { CLIENT_NAME } from '@/src/micro-service/client-options/grpc-client.option'
+import { CLIENT_NAME } from '@/src/microservice-config/client-options/grpc-client.option'
 import {
 	IEmailInput,
 	IMailService,
 	IEmailStatus,
-} from '@/src/micro-service/interfaces/send-mail-service.interface'
+} from '@/src/microservice-config/interfaces/send-mail-service.interface'
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { ClientGrpcProxy } from '@nestjs/microservices'
 
