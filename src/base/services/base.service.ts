@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
-import { DeepPartial } from 'typeorm'
+import { DeepPartial, FindConditions } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { EntityBase } from '../entity/base.entity'
 import { BasePagination } from '../interfaces/pagination.interface'
@@ -18,7 +18,7 @@ export abstract class BaseService<T extends EntityBase, K extends EntityBaseRepo
 		return results
 	}
 
-	public async findOne(criteria: { [key in keyof DeepPartial<T>]?: any }) {
+	public async findOne(criteria: { [P in keyof DeepPartial<T>]?: T[P] }) {
 		return await this.repository.findOne({ where: criteria })
 	}
 
@@ -27,7 +27,7 @@ export abstract class BaseService<T extends EntityBase, K extends EntityBaseRepo
 	}
 
 	public async update(
-		criteria: { [key in keyof DeepPartial<T>]: any },
+		criteria: { [P in keyof FindConditions<T>]?: T[P] | any },
 		updateData: QueryDeepPartialEntity<T>,
 	) {
 		return await this.repository.update(criteria, updateData).catch(null)

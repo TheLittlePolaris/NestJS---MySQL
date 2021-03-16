@@ -4,14 +4,32 @@ import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto'
 import { User } from './entity/user.entity'
 import { UserRepository } from './entity-repository/user.entity-repository'
 import { BaseService } from '@/src/base/services/base.service'
+import { USER_ROLE } from './constants/role.constant'
+import { nanoid } from 'nanoid'
+import { hash } from './helper/user.helper'
 
 @Injectable()
-export class UserService extends BaseService<User, UserRepository> {
+export class UserService extends BaseService<User, UserRepository> implements OnModuleInit {
 	constructor(private usersRepository: UserRepository) {
 		super(usersRepository)
 	}
 
-	async onModuleInit() {}
+	async onModuleInit() {
+		// const user = this.usersRepository.create({
+		// 	email: 'polarisu1999@gmail.com',
+		// 	roles: [USER_ROLE.SUPER_ADMIN],
+		// 	password: await hash('123456'),
+		// 	firstName: 'The Litle',
+		// 	lastName: 'Polarisu',
+		// 	fullName: 'The Little Poalrisu',
+		// 	userId: nanoid(10),
+		// })
+		// console.log(user)
+		// await this.usersRepository.save(user)
+		// await this.usersRepository.updateOne(1, { roles: [USER_ROLE.SUPER_ADMIN] })
+		// const saved = await this.findOneUser({ email: 'polarisu1999@gmail.com' })
+		// console.log(saved)
+	}
 
 	async createUser(userData: CreateUserDto) {
 		return await this.usersRepository.createAndSave(userData)

@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, UpdateResult } from 'typeorm'
+import { EntityRepository, FindConditions, Repository, UpdateResult } from 'typeorm'
 import { EntityBase } from '../entity/base.entity'
 
 @EntityRepository()
@@ -17,7 +17,7 @@ export class EntityBaseRepository<T extends EntityBase> extends Repository<T> {
 
 	// TODO: query builder, this is just a demo
 	async updateOne<T>(criteria: any, data: { [K in keyof Partial<T>]?: T[K] }): Promise<T> {
-		const record = await super.findOne(criteria, data)
+		const record = await super.findOne(criteria)
 		if (!record) return null
 		Object.keys(data).map((k) => {
 			if (k in record && data[k]) record[k] = data[k]

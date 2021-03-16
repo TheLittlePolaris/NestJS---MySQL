@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from '@/src/app/user/user.service'
-import { User } from '../user/entity/user.entity'
 import { CreateUserDto, UserDto } from '../user/dto/user.dto'
 import { LoginDto } from './dto/auth.dto'
 import { MicroserviceService } from '../microservice/microservice.service'
+import { SessionService } from '../session/session.service'
 
 @Injectable()
 export class AuthService {
@@ -12,6 +12,7 @@ export class AuthService {
 		private readonly userService: UserService,
 		private readonly jwtService: JwtService,
 		private readonly microService: MicroserviceService,
+		private readonly sessionService: SessionService
 	) {}
 
 	public async signUp(userData: CreateUserDto) {
@@ -20,7 +21,7 @@ export class AuthService {
 		if (!!existedUser) throw new HttpException('User Existed', HttpStatus.BAD_REQUEST)
 		const newUser = await this.userService.createUser(userData)
 		const { firstName, lastName, userId } = newUser
-		// demo of using amicro service to send email to new user
+		// demo of using a micro service to send email to new user
 		this.microService.sendMail({ mailTemplateName: 'WelcomeUser', firstName, lastName, userId })
 		return this.signUser(new UserDto(newUser))
 	}
@@ -48,9 +49,10 @@ export class AuthService {
 	}
 
 	async signUser(user: UserDto) {
-		const { email, userId, roles } = user
+		const { email } = user
+		const { id } = await this.sessionService.createRecord({ email: user.email })
 		return {
-			token: this.jwtService.sign({ email, userId, roles }),
+			token: this.jwtService.sign({ email, sessionId: id }),
 			user,
 		}
 	}

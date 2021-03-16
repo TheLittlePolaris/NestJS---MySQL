@@ -1,12 +1,11 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core'
+import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import * as helmet from 'helmet'
 import * as csurf from 'csurf'
 import * as morgan from 'morgan'
 import * as cookieParser from 'cookie-parser'
-import * as session from 'express-session'
-import { Logger, ValidationPipe } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter'
 import { AllExceptionsFilter } from './exception-filters/all-exception.filter'
 import { ConfigService } from './app/config/config.service'
@@ -39,8 +38,7 @@ async function bootstrap() {
 	const { envConfig } = app.get(ConfigService)
 	const port = envConfig['APP_PORT'] || 12021
 
-	app.use(session({ secret: envConfig['AUTH_SECRET'], resave: false, saveUninitialized: false }))
-	app.use(csurf())
+	app.use(csurf({ cookieParser: true }))
 
 	app.useGlobalFilters(new HttpExceptionFilter(), new AllExceptionsFilter())
 
