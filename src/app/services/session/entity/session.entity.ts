@@ -1,5 +1,6 @@
 import { EntityBase } from '@/app-base/entity/base.entity'
 import { Column, Entity } from 'typeorm'
+import { User } from '../../user/entity/user.entity'
 
 @Entity()
 export class Session extends EntityBase {
@@ -10,9 +11,9 @@ export class Session extends EntityBase {
 	@Column({ type: 'varchar', nullable: false })
 	email: string
 
+	@Column({ type: 'int', nullable: false })
+	userId
+
 	@Column({ type: 'varchar', nullable: false })
 	refreshToken: string
-
-  @Column({ type: 'bigint', nullable: false  })
-  refreshExpireAt: number
 }

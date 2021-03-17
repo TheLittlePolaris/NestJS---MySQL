@@ -5,7 +5,6 @@ import { UserDto } from '../../user/dto/user.dto'
 import { User } from '../../user/entity/user.entity'
 import { SessionService } from '../../session/session.service'
 import { AppConfigService } from '@/app/app-config/app-config.service'
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	constructor(
@@ -15,18 +14,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			ignoreExpiration: false,
-			secretOrKey: configService.authSecret,
+			secretOrKey: configService.jwtAccessSecret,
 			jsonWebTokenOptions: {
-				maxAge: 86400,
+				maxAge: configService.jwtAccessDuration,
 			},
 		})
 	}
 
 	async validate(payload: { email: string; sessionId: number; type?: string }) {
+
 		console.log(payload, "<====== validate payload")
 		const { email, sessionId, type = null } = payload
-		await this.sessionService.validateSession(email, sessionId, type)
-		return { email, sessionId }
+		const user = await this.sessionService.validateSession(sessionId)
+		return user
 	}
 
 	/**
@@ -35,7 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	 * @param req The request to authenticate.
 	 * @param options Options passed to the strategy.
 	 */
-	// authenticate(req: express.Request, options?: any): void {
+	// authenticate(req: Request, options?: any): void {
 	// 	// console.log(req, 'JWT Authenticate')
 	// }
 
@@ -74,7 +74,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	 * @api public
 	 */
 	// fail(challenge: any, status: number): void {};
-	// fail(status: number): void {};
+	fail(status: number): void {
+		console.log(status, "<==== fail status")
+	};
 
 	/**
 	 * Redirect to `url` with optional `status`, defaulting to 302.
@@ -113,7 +115,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	 * @param {Error} err
 	 * @api public
 	 */
-	// error(err: Error): void {
-	// 	Logger.log(err, 'JWT Error')
-	// }
+	error(err: Error): void {
+		console.log(err, "<====== validate error")
+	}
 }

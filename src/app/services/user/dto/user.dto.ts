@@ -1,9 +1,11 @@
+import { BaseDto } from '@/app-base/dto/base.dto'
+import { BaseFields } from '@/app-base/interfaces/repository.interface'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsEnum, IsNotEmpty, IsString, ValidateNested } from 'class-validator'
 import { USER_ROLE } from '../constants/role.constant'
 import { User } from '../entity/user.entity'
 
-export class UserDto {
+export class UserDto extends BaseDto<Omit<User, 'password'>> {
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty({ type: Number })
@@ -49,9 +51,9 @@ export class UserDto {
 	isActive: boolean
 
 	constructor(userData: UserDto | User) {
+		super(userData)
 		const { id, userId, email, firstName, lastName, fullName } = userData
 
-		this.id = id
 		this.userId = userId
 		this.email = email
 		this.firstName = firstName
@@ -61,7 +63,7 @@ export class UserDto {
 }
 
 export class CreateUserDto
-	implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId' | 'roles'> {
+	implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId' | 'roles' | BaseFields> {
 	@ApiProperty({ required: true })
 	email: string
 

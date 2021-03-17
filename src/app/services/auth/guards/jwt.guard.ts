@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 
 import { SetMetadata } from '@nestjs/common'
+import { User } from '../../user/entity/user.entity'
 
 export const IS_PUBLIC_KEY = 'isPublic'
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true)
@@ -20,10 +21,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 		if (isPublic) {
 			return true
 		}
+
+
 		return super.canActivate(context)
 	}
 
-	handleRequest(err, user, info) {
+	handleRequest<Error, User>(err, user: User, info) {
+		console.log(err, user)
+		console.log(info, '<====== handle request info')
 
 		// You can throw an exception based on either "info" or "err" arguments
 		if (err || !user) {

@@ -1,9 +1,12 @@
 import { BaseService } from '@/app-base/service/base.service'
 import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common'
+import { nanoid } from 'nanoid'
 import { BasePagination } from '../../../app-base/interfaces/pagination.interface'
+import { USER_ROLE } from './constants/role.constant'
 import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto'
 import { UserRepository } from './entity-repository/user.entity-repository'
 import { User } from './entity/user.entity'
+import { hash } from './helper/user.helper'
 
 @Injectable()
 export class UserService extends BaseService<User, UserRepository> implements OnModuleInit {
@@ -18,7 +21,7 @@ export class UserService extends BaseService<User, UserRepository> implements On
 		// 	password: await hash('123456'),
 		// 	firstName: 'The Litle',
 		// 	lastName: 'Polarisu',
-		// 	fullName: 'The Little Poalrisu',
+		// 	fullName: 'The Little Polarisu',
 		// 	userId: nanoid(10),
 		// })
 		// console.log(user)

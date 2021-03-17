@@ -37,36 +37,38 @@ export class AuthService {
 	}
 
 	public async createSession(user: User | UserDto) {
-		const { email } = user
-		const session = await this.sessionService.createRecord({
+		const { email, id } = user
+		const session = await this.sessionService.createAndSave({
 			email: email,
+			userId: id,
+			refreshToken: '',
 		})
+
+		console.log(session)
 
 		if (!session) throw new HttpException('Something went wrong!', HttpStatus.INTERNAL_SERVER_ERROR)
 
 		const token = this.jwtService.sign({ email, sessionId: session.id }, <JwtSignOptions>{
-			expiresIn: '15',
+			expiresIn: '12h',
 		})
 		const refreshToken = this.jwtService.sign(
 			{ email, sessionId: session.id, type: `R:${session.id}` },
 			<JwtSignOptions>{ expiresIn: '72h' },
 		)
-
+			console.log(session)
 		await this.updateSession(session.id, refreshToken)
-
 		return { session, token, refreshToken }
 	}
 
 	public async updateSession(sessionId: number, refreshToken: string) {
 		await this.sessionService.updateSession(sessionId, {
 			refreshToken,
-			refreshExpireAt: new Date().setHours(72),
 		})
 	}
 
 	async validateUser(email: string, pass: string): Promise<UserDto | null> {
 		const user = await this.userService.findOneUser({ email })
-		console.log(user, "<====== validate User")
+		console.log(user, '<====== validate User')
 		if (!user) throw new HttpException('Unauthenticated', HttpStatus.UNAUTHORIZED)
 		if (await this.userService.comparePassword(pass, user.password)) {
 			const { password, ...result } = user

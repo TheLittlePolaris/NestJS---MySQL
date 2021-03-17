@@ -29,8 +29,21 @@ export class AppConfigService implements OnModuleInit {
 
 	onModuleInit() {}
 
-	public get authSecret() {
-		return this.envConfig['AUTH_SECRET']
+	public get jwtAccessSecret() {
+		return this.envConfig['JWT_ACCESS_SECRET']
+	}
+
+
+	public get jwtAccessDuration() {
+		return this.envConfig['JWT_ACCESS_DURATION']
+	}
+
+	public get jwtRefreshSecret() {
+		return this.envConfig['JWT_REFRESH_SECET']
+	}
+
+	public get jwtRefreshDuration() {
+		return this.envConfig['JWT_REFRESH_DURATION']
 	}
 
 	public get dbHost() {
@@ -60,7 +73,13 @@ export class AppConfigService implements OnModuleInit {
 	private async validateSchema(envOutput: { [key: string]: string }) {
 		const schema = object({
 			NODE_ENV: string(),
-			AUTH_SECRET: string(),
+
+			JWT_ACCESS_SECRET: string(),
+			JWT_ACCESS_DURATION: string(),
+
+			JWT_REFRESH_SECET: string(),
+			JWT_REFRESH_DURATION: string(),
+
 			APP_PORT: number(),
 			APP_NAME: string(),
 			DB_HOST: string(),

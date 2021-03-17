@@ -8,6 +8,10 @@ import { EntityBaseRepository } from '../entity-repository/base.entity-repositor
 export abstract class BaseService<T extends EntityBase, K extends EntityBaseRepository<T>> {
 	constructor(private repository: K) {}
 
+	public async createAndSave(data: DeepPartial<T>) {
+		return await this.repository.saveOne(data)
+	}
+
 	async createRecord(data: DeepPartial<T>) {
 		return await this.repository.create(data)
 	}

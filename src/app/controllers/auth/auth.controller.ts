@@ -18,4 +18,7 @@ export class AuthController {
 	async userSignUp(@Body() signUpBody: CreateUserDto) {
 		return await this.authSevice.signUp(signUpBody)
 	}
+
+	@Post('/refresh')
+	async refreshToken(@Body() token: { refreshToken:  string }) {}
 }

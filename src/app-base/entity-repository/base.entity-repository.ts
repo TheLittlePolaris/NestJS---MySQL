@@ -1,10 +1,14 @@
-import { EntityRepository, FindConditions, Repository, UpdateResult } from 'typeorm'
+import { DeepPartial, EntityRepository, FindConditions, Repository, UpdateResult } from 'typeorm'
 import { EntityBase } from '../entity/base.entity'
 
 @EntityRepository()
 export class EntityBaseRepository<T extends EntityBase> extends Repository<T> {
 	constructor() {
 		super()
+	}
+
+	public async saveOne(data: T | DeepPartial<T>) {
+		return await super.save(data as DeepPartial<T>)
 	}
 
 	async updateMany(

@@ -15,3 +15,6 @@ export type UpdateCritetia =
 	| FindConditions<Entity>
 
 export type UpdateData = QueryDeepPartialEntity<Entity>
+
+export type BaseFields = 	"createdAt" | "updatedAt" | "deleted" | "deletedAt"
+

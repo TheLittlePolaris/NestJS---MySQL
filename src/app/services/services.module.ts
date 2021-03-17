@@ -29,7 +29,7 @@ const repositories = [UserRepository, SessionRepository]
 		JwtModule.registerAsync({
 			imports: [AppConfigModule],
 			useFactory: (configService: AppConfigService) => ({
-				secret: configService.authSecret,
+				secret: configService.jwtAccessSecret,
 			}),
 			inject: [AppConfigService],
 		}),
