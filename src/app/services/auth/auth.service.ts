@@ -23,7 +23,6 @@ export class AuthService {
 		const existedUser = await this.userService.findOneUser({ email })
 		if (!!existedUser) throw new HttpException('User Existed', HttpStatus.BAD_REQUEST)
 		const newUser = await this.userService.createUser(userData)
-		const { firstName, lastName, userId } = newUser
 		// demo of using a micro service to send email to new user
 		// this.microService.sendMail({ mailTemplateName: 'WelcomeUser', firstName, lastName, userId })
 		return this.signUser(new UserDto(newUser))
@@ -48,27 +47,38 @@ export class AuthService {
 
 		if (!session) throw new HttpException('Something went wrong!', HttpStatus.INTERNAL_SERVER_ERROR)
 
-		const token = this.jwtService.sign({ email, sessionId: session.id }, <JwtSignOptions>{
-			expiresIn: '12h',
-		})
-		const refreshToken = this.jwtService.sign(
-			{ email, sessionId: session.id, type: `R:${session.id}` },
-			<JwtSignOptions>{ expiresIn: '72h' },
-		)
-			console.log(session)
+		const token = this.getAccessToken('access', { email, sessionId: session.id })
+		const refreshToken = this.getAccessToken('refresh', { email, sessionId: session.id })
+
 		await this.updateSession(session.id, refreshToken)
 		return { session, token, refreshToken }
 	}
 
+	private getAccessToken(
+		type: 'access' | 'refresh',
+		payload: { email: string; sessionId: number },
+	) {
+		const config =
+			type === 'access'
+				? {
+						expiresIn: this.appConfigService.jwtAccessDuration,
+						secret: this.appConfigService.jwtAccessSecret,
+				  }
+				: {
+						expiresIn: this.appConfigService.jwtRefreshDuration,
+						secret: this.appConfigService.jwtRefreshSecret,
+				  }
+		return this.jwtService.sign(payload, config)
+	}
+
 	public async updateSession(sessionId: number, refreshToken: string) {
-		await this.sessionService.updateSession(sessionId, {
+		return await this.sessionService.updateSession(sessionId, {
 			refreshToken,
 		})
 	}
 
 	async validateUser(email: string, pass: string): Promise<UserDto | null> {
 		const user = await this.userService.findOneUser({ email })
-		console.log(user, '<====== validate User')
 		if (!user) throw new HttpException('Unauthenticated', HttpStatus.UNAUTHORIZED)
 		if (await this.userService.comparePassword(pass, user.password)) {
 			const { password, ...result } = user
@@ -85,5 +95,18 @@ export class AuthService {
 			refreshToken,
 			user,
 		}
+	}
+
+	async exchangeSession(currentUser: UserDto, refreshToken?: string) {
+		const currentSession = await this.sessionService.findOne({
+			email: currentUser.email,
+			deleted: false,
+		})
+		await this.sessionService.updateSession(currentSession.id, {
+			deleted: true,
+			deletedAt: Date.now(),
+		})
+
+		return await this.signUser(currentUser)
 	}
 }

@@ -12,10 +12,11 @@ export class SessionService extends BaseService<Session, SessionRepository> {
 
 	public async validateSession(sessionId: number) {
 		const userSession = await this.sessionRepository.getSessionWithUser(sessionId)
-		console.log(userSession)
 		if (!userSession) throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN)
-
-		return new UserDto(userSession.user)
+		const {
+			user: { password, ...result },
+		} = userSession
+		return result
 	}
 
 	public async createSession(userEmail: string, userId: number) {

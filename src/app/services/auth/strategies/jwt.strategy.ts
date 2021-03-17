@@ -22,11 +22,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	}
 
 	async validate(payload: { email: string; sessionId: number; type?: string }) {
-
-		console.log(payload, "<====== validate payload")
-		const { email, sessionId, type = null } = payload
-		const user = await this.sessionService.validateSession(sessionId)
-		return user
+		const { sessionId } = payload
+		return await this.sessionService.validateSession(sessionId)
 	}
 
 	/**

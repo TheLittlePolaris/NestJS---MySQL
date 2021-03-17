@@ -21,7 +21,7 @@ export class SessionRepository extends EntityBaseRepository<Session> {
 	public async getSessionWithUser(id: number): Promise<ISession> {
 		const session = await this.entityManager
 			.createQueryBuilder(Session, 'session')
-			.where('session.id = :id', { id })
+			.where('session.id = :id and session.deleted = false', { id })
 			.leftJoinAndMapOne('session.user', User, 'user', 'session.userId = user.id')
 			.getOne() as any
 

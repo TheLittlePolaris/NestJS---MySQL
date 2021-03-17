@@ -12,7 +12,7 @@ export class Session extends EntityBase {
 	email: string
 
 	@Column({ type: 'int', nullable: false })
-	userId
+	userId: number
 
 	@Column({ type: 'varchar', nullable: false })
 	refreshToken: string
