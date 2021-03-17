@@ -3,32 +3,31 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { getConnectionOptions } from 'typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { UserModule } from './app/user/user.module'
-import { AuthModule } from './app/auth/auth.module'
-import { ConfigService } from './app/config/config.service'
-import { ConfigModule } from './app/config/config.module'
-import { SessionModule } from './app/session/session.module'
-import { MicroserviceModule } from './app/microservice/microservice.module';
+import { MicroserviceModule } from './microservice/microservice.module';
+import { ControllersModule } from './app/controllers/controllers.module';
+import { ServicesModule } from './app/services/services.module';
+import { AppConfigService } from './app/app-config/app-config.service'
+import { AppConfigModule } from './app/app-config/app-config.module'
 
 @Module({
 	imports: [
-		ConfigModule,
-		TypeOrmModule.forRootAsync({
-			imports: [ConfigModule],
-			useFactory: async (configService: ConfigService) =>
-				Object.assign(await getConnectionOptions(), {
-					host: configService.dbHost,
-					port: configService.dbPort,
-					username: configService.dbUserName,
-					password: configService.dbPassword,
-					database: configService.dbName,
-				}),
-			inject: [ConfigService],
-		}),
-		UserModule,
-		AuthModule,
-		SessionModule,
 		MicroserviceModule,
+		ControllersModule,
+		ServicesModule,
+		AppConfigModule,
+		TypeOrmModule.forRootAsync({
+			imports: [AppConfigModule],
+			useFactory: async (appConfigService: AppConfigService) =>
+				Object.assign(await getConnectionOptions(), {
+					host: appConfigService.dbHost,
+					port: appConfigService.dbPort,
+					username: appConfigService.dbUserName,
+					password: appConfigService.dbPassword,
+					database: appConfigService.dbName,
+				}),
+			inject: [AppConfigService],
+		}),
+
 	],
 	controllers: [AppController],
 	providers: [AppService],

@@ -8,14 +8,19 @@ import * as cookieParser from 'cookie-parser'
 import { Logger } from '@nestjs/common'
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter'
 import { AllExceptionsFilter } from './exception-filters/all-exception.filter'
-import { ConfigService } from './app/config/config.service'
-import { grpcMailClientOption } from './microservice-config/client-options/grpc-client.option'
+import { grpcMailClientOption } from './microservice/client-options/grpc-client.option'
+import { AppConfigService } from './app/app-config/app-config.service'
 
 async function bootstrap() {
 	const BOOSTRAP_CONTEXT = 'Boostrap'
 	const app = await NestFactory.create(AppModule)
 
-	await app.connectMicroservice( grpcMailClientOption)
+	app.enableCors({ origin: '*' })
+	app.use(cookieParser())
+	app.use(helmet())
+	app.use(morgan('tiny'))
+
+
 
 	const config = new DocumentBuilder()
 		.setTitle('Nestjs Example MySQL')
@@ -25,17 +30,14 @@ async function bootstrap() {
 		.addBearerAuth()
 		.build()
 
-	app.enableCors({ origin: '*' })
-	app.use(cookieParser())
-	app.use(helmet())
-	app.use(morgan('tiny'))
-
 	const document = SwaggerModule.createDocument(app, config)
 	SwaggerModule.setup('api', app, document)
 
 	await app.init()
 
-	const { envConfig } = app.get(ConfigService)
+	await app.connectMicroservice(grpcMailClientOption)
+
+	const { envConfig } = app.get(AppConfigService)
 	const port = envConfig['APP_PORT'] || 12021
 
 	app.use(csurf({ cookieParser: true }))
