@@ -14,9 +14,9 @@ export class SessionService extends BaseService<Session, SessionRepository> {
 		const userSession = await this.sessionRepository.getSessionWithUser(sessionId)
 		if (!userSession) throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN)
 		const {
-			user: { password, ...result },
+			user: { password, ...userProperties },
 		} = userSession
-		return result
+		return userProperties
 	}
 
 	public async createSession(userEmail: string, userId: number) {

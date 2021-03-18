@@ -35,7 +35,7 @@ async function bootstrap() {
 
 	await app.init()
 
-	await app.connectMicroservice(grpcMailClientOption)
+	// await app.connectMicroservice(grpcMailClientOption)
 
 	const { envConfig } = app.get(AppConfigService)
 	const port = envConfig['APP_PORT'] || 12021

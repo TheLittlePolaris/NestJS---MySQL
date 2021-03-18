@@ -1,4 +1,11 @@
-import { ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import {
+	ExecutionContext,
+	HttpException,
+	HttpStatus,
+	Injectable,
+	Logger,
+	UnauthorizedException,
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 
@@ -23,18 +30,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 			return true
 		}
 
-
 		return super.canActivate(context)
 	}
 
 	handleRequest<Error, User>(err, user: User | UserDto, info) {
-		console.log(user, "<====== user")
-		console.log(err, "<===== err")
-		console.log("info")
+		console.log(user, '<====== user')
+		console.log(err, '<===== err')
+		console.log(info, '<======= info')
 
 		// You can throw an exception based on either "info" or "err" arguments
-		if (err || !user) {
-			throw err || new UnauthorizedException()
+		if (!user && (err || info)) {
+			throw new HttpException(info['name'], HttpStatus.UNAUTHORIZED)
 		}
 		return user
 	}

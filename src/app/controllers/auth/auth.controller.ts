@@ -24,12 +24,13 @@ export class AuthController {
 	}
 
 	@Post('/refresh')
-	@UseGuards(JwtRefreshAuthGuard)
 	@ApiHeader(<ApiHeaderOptions>{
 		name: 'X-Refresh-Token',
 		description: 'The refresh token to exchange for new access token',
 	})
+	@UseGuards(JwtRefreshAuthGuard)
 	async refreshToken(@CurrentUser() user: UserDto) {
+		console.log(user)
 		return await this.authSevice.exchangeSession(user)
 	}
 }

@@ -11,10 +11,11 @@ import { SessionRepository } from './session/entity-repository/session.entity-re
 import { SessionService } from './session/session.service'
 import { UserRepository } from './user/entity-repository/user.entity-repository'
 import { UserService } from './user/user.service'
+import { JwtRefreshStrategy } from './auth/strategies/jwt-refresh.strategy'
 
 const appServices = [UserService, AuthService, SessionService]
 
-const otherProviders = [JwtStrategy]
+const otherProviders = [JwtStrategy, JwtRefreshStrategy]
 
 const services = [...appServices, ...otherProviders]
 
@@ -23,7 +24,7 @@ const repositories = [UserRepository, SessionRepository]
 @Module({
 	imports: [
 		AppConfigModule,
-    MicroserviceModule,
+		MicroserviceModule,
 		TypeOrmModule.forFeature(repositories),
 		PassportModule,
 		JwtModule.registerAsync({
