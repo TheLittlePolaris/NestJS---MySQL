@@ -1,10 +1,10 @@
 {
-	"type": "mysql",
+	"type": "mysql",	
 	"entities": ["dist/**/*.entity{.ts,.js}"],
 	"migrationsTableName": "migration_table",
-	"migrations": ["db-migration/*{.ts,.js}"],
+	"migrations": ["src/db-migration/*{.ts}"],
 	"cli": {
-		"migrationsDir": "db-migration"
+		"migrationsDir": "src/db-migration"
 	},
 	"synchronize": true
 }

@@ -1,12 +1,11 @@
 import { EntityBase } from '@/app-base/entity/base.entity'
 import { Column, Entity, OneToMany } from 'typeorm'
-import { Session } from '../../session/entity/session.entity'
 import { USER_ROLE } from '../constants/role.constant'
 
 @Entity()
 export class User extends EntityBase {
 	@Column({ type: 'varchar', unique: true })
-	userId: string
+	userNanoId: string
 
 	@Column({
 		type: 'set',

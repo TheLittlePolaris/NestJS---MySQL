@@ -31,8 +31,12 @@ export class AuthService {
 	public async signIn(data: LoginDto) {
 		const { email, password } = data
 		const validated = await this.validateUser(email, password)
-		if (!validated) throw new HttpException('User not exists', HttpStatus.NOT_FOUND)
+		if (!validated) throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED)
 		return this.signUser(validated)
+	}
+
+	public async logout(user: UserDto) {
+		return await this.sessionService.deleteSession({ user })
 	}
 
 	public async createSession(user: User | UserDto) {
@@ -79,7 +83,7 @@ export class AuthService {
 
 	async validateUser(email: string, pass: string): Promise<UserDto | null> {
 		const user = await this.userService.findOneUser({ email })
-		if (!user) throw new HttpException('Unauthenticated', HttpStatus.UNAUTHORIZED)
+		if (!user) throw new HttpException('User not exists', HttpStatus.NOT_FOUND)
 		if (await this.userService.comparePassword(pass, user.password)) {
 			const { password, ...result } = user
 			return result

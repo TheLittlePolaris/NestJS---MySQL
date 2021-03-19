@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "yarn prebuild && export NODE_ENV=development && nest start --watch",
-    "start:dev-win": "set NODE_ENV=development&& nest start --watch",
+    "start:dev-win": "yarn prebuild && set NODE_ENV=development&& nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,pps,libs,test}/**/*.ts\" --fix",
@@ -20,7 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
+    "migration:generate": "npm run typeorm -- migration:generate --config ./migrate.ormconfig.json --connection --name ",
+    "migration:run": "npm run typeorm --config ./migrate.ormconfig.json migration:run"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.6",
@@ -42,6 +44,8 @@
     "grpc": "^1.24.6",
     "helmet": "^4.4.1",
     "joi": "^17.4.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
     "nanoid": "^3.1.21",
@@ -59,6 +63,7 @@
     "@nestjs/testing": "^7.5.1",
     "@types/express": "^4.17.8",
     "@types/jest": "^26.0.15",
+    "@types/lodash-es": "^4.17.4",
     "@types/node": "^14.14.6",
     "@types/passport-jwt": "^3.0.5",
     "@types/supertest": "^2.0.10",

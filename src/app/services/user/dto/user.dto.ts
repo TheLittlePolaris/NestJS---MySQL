@@ -14,7 +14,7 @@ export class UserDto extends BaseDto<Omit<User, 'password'>> {
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty({ type: String })
-	userId: string
+	userNanoId: string
 
 	@IsEnum(USER_ROLE)
 	@IsArray()
@@ -52,9 +52,9 @@ export class UserDto extends BaseDto<Omit<User, 'password'>> {
 
 	constructor(userData: UserDto | User) {
 		super(userData)
-		const { id, userId, email, firstName, lastName, fullName } = userData
+		const { id, userNanoId: userId, email, firstName, lastName, fullName } = userData
 
-		this.userId = userId
+		this.userNanoId = userId
 		this.email = email
 		this.firstName = firstName
 		this.lastName = lastName
@@ -63,7 +63,7 @@ export class UserDto extends BaseDto<Omit<User, 'password'>> {
 }
 
 export class CreateUserDto
-	implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userId' | 'roles' | BaseFields> {
+	implements Omit<UserDto, 'isActive' | 'id' | 'fullName' | 'userNanoId' | 'roles' | BaseFields> {
 	@ApiProperty({ required: true })
 	email: string
 

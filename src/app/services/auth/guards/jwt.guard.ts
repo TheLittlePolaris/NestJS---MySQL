@@ -34,9 +34,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 	}
 
 	handleRequest<Error, User>(err, user: User | UserDto, info) {
-		console.log(user, '<====== user')
-		console.log(err, '<===== err')
-		console.log(info, '<======= info')
+		// console.log(user, '<====== user')
+		// console.log(err, '<===== err')
+		// console.log(info, '<======= info')
 
 		// You can throw an exception based on either "info" or "err" arguments
 		if (!user && (err || info)) {

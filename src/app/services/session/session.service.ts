@@ -1,6 +1,7 @@
 import { BaseService } from '@/app-base/service/base.service'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { UserDto } from '../user/dto/user.dto'
+import { User } from '../user/entity/user.entity'
 import { SessionRepository } from './entity-repository/session.entity-repository'
 import { Session } from './entity/session.entity'
 
@@ -27,7 +28,11 @@ export class SessionService extends BaseService<Session, SessionRepository> {
 		return await this.updateOne(sessionId, data)
 	}
 
-	public async deleteSession(sessionId: number) {
-		return await this.sessionRepository.delete(sessionId)
+	public async deleteSession({
+		sessionId,
+		user,
+	}: { sessionId?: number; user?: User | UserDto } = {}) {
+		if (!(sessionId || user)) throw new Error('Delete session ust have at least one criteria')
+		return await this.sessionRepository.delete(sessionId || { userId: user.id })
 	}
 }

@@ -1,0 +1,15 @@
+{
+    "type": "mysql",
+    "host": "<your-host>",
+    "port": "<your-port>",
+    "username": "<your-username>",
+    "password": "<your-password>",
+    "database": "<your-db-name>",
+	"entities": ["dist/**/*.entity{.ts,.js}"],
+	"migrationsTableName": "migration_table",
+	"migrations": ["<your-migration-source-path>"],
+	"cli": {
+		"migrationsDir": "<your-migration-dir>"
+	},
+	"synchronize": true
+}

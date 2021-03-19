@@ -2,7 +2,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["/protos/*.proto"],
+    "assets": [
+      "/protos/*.proto"
+    ],
     "watchAssets": true
-  }
+  },
+  "exclude": [
+    "src/db-migration"
+  ]
 }
